@@ -1,3 +1,8 @@
+// Auth Check
+if (localStorage.getItem('isAuthenticated') !== 'true') {
+    window.location.replace('login.html');
+}
+
 // Theme Logic
 const themeToggle = document.getElementById('theme-toggle');
 const root = document.documentElement;
@@ -5,6 +10,17 @@ const savedTheme = localStorage.getItem('theme') || 'light';
 
 // Set initial theme
 root.setAttribute('data-theme', savedTheme);
+
+// Logout Handler
+const logoutBtn = document.querySelector('a[href="login.html"]');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('isAuthenticated');
+        window.location.href = 'login.html';
+    });
+}
+
 
 themeToggle.addEventListener('click', () => {
     const currentTheme = root.getAttribute('data-theme');
@@ -105,25 +121,25 @@ function renderIssues() {
     const issues = getIssues();
     const issuesList = document.getElementById('issuesList');
     const totalCount = document.getElementById('total-count');
-    
+
     issuesList.innerHTML = '';
     totalCount.textContent = `${issues.length} Issues`;
 
     // Sort by newest first
     issues.reverse().forEach(issue => {
         const { id, description, severity, assignedTo, status, createdAt } = issue;
-        
+
         // Determine status class
         const displayStatus = status || 'Open';
-        
+
         // Render content
         const issueCard = document.createElement('div');
         issueCard.className = 'issue-card';
-        
+
         // Add strike-through effect for closed issues style logic if needed, 
         // but aesthetic requirements favor opacity/badges over <strike> tags usually.
         // We will keep text clean but use the status badge effectively.
-        
+
         issueCard.innerHTML = `
             <div class="issue-header">
                 <span class="issue-id">#${id.slice(-6)}</span>
@@ -154,7 +170,7 @@ function renderIssues() {
                 <button onclick="deleteIssue('${id}')" class="btn btn-issue-action-delete">Delete</button>
             </div>
         `;
-        
+
         issuesList.appendChild(issueCard);
     });
 }
@@ -164,9 +180,9 @@ function showToast(message) {
     const toast = document.getElementById('toast');
     const msg = document.getElementById('toast-message');
     msg.textContent = message;
-    
+
     toast.classList.remove('hidden');
-    
+
     setTimeout(() => {
         toast.classList.add('hidden');
     }, 3000);

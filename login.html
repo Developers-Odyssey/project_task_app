@@ -1,50 +1,163 @@
 <!DOCTYPE html>
-  <head>
-    <title>Login</title>
-    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css">
-  </head>
+<html lang="en">
 
-  <body>
-    <header>
-      <img src="images/logo.png" alt="">
-      <nav>
-          <ol>
-            <li><a href="404.html">File a complaint</a></li>
-            <li><a href="https://github.com/WPR-BC-Project/">Github Repo</a></li>
-            <li><a href="https://github.com/WPR-BC-Project/projectX/pulse">Github Team</a></li>
-            <li><a href="https://github.com/WPR-BC-Project/projectX">Report a Bug</a></li>
-          </ol>
-      </nav>
-    </header>
-    <div id="enterDetails">Enter your login details</div>
-    <div class="Form">
-      <label for="Name">Enter Account Name:</label>
-      <input type="text" id="Name">
-      <label for="Password">Enter Password:</label>
-      <input type="password" id="Password">
-    <input id="LoginButton" type="button" value="Login" onclick="SignIn()">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BugPro - Login</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 0 1.5rem;
+    }
+
+    .brand-large {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .brand-large img {
+      height: 64px;
+      margin-bottom: 1rem;
+    }
+
+    .brand-large span {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .login-footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .login-footer a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .login-info {
+      background: rgba(var(--primary-hue), 255, 200, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(var(--primary-hue), 255, 200, 0.2);
+    }
+
+    .login-info code {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-background"></div>
+
+  <div class="login-container">
+    <div class="brand-large">
+      <img src="images/logo.png" alt="BugPro Logo" />
+      <span>BugPro</span>
     </div>
 
-    <script>
-      
-      function SignIn(){
+    <div class="glass-card">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 1rem;">Welcome Back</h2>
 
-      let name = document.getElementById("Name").value;
-      let password = document.getElementById("Password").value;
-      
-      if (name == "Admin" && password == "12345") {
-        alert('Sign-in successful'); 
-        //route to bug tracker
-        window.location.replace("index.html");
-      }else{
-        alert('User name doesnt exist');
+      <div class="login-info">
+        <p><strong>Demo Credentials:</strong></p>
+        <div style="margin-top: 0.5rem;">User: <code>admin</code></div>
+        <div>Pass: <code>password123</code></div>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter your username" autocomplete="username">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 2rem;">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+      </form>
+
+      <div class="login-footer">
+        <a href="https://github.com/WPR-BC-Project/projectX">Report a bug</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">
+    <div class="toast-content">
+      <span id="toast-message">Notification</span>
+    </div>
+  </div>
+
+  <script>
+    // Use the same theme logic as main app
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Toast logic (mini version for login)
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      msg.textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Simple mock authentication
+      if (username === 'admin' && password === 'password123') {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('currentUser', username);
+
+        showToast("Login successful! Redirecting...");
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      } else {
+        showToast("Invalid credentials. Please try again.");
+        // Add shake effect or red border logic here if desired
+        document.getElementById('password').value = '';
       }
+    });
+  </script>
+</body>
 
-      }
-    </script>
-
-  </body>
 </html>
