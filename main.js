@@ -1,226 +1,176 @@
-function submitIssue(e) {
-  const getInputValue = (id) => document.getElementById(id).value;
+// Theme Logic
+const themeToggle = document.getElementById('theme-toggle');
+const root = document.documentElement;
+const savedTheme = localStorage.getItem('theme') || 'light';
 
-  const description = getInputValue("issueDescription");
-  const severity = getInputValue("issueSeverity");
-  const assignedTo = getInputValue("issueAssignedTo");
-  const id = Math.floor(Math.random() * 100000000) + "";
+// Set initial theme
+root.setAttribute('data-theme', savedTheme);
 
-  const status = "Open";
+themeToggle.addEventListener('click', () => {
+    const currentTheme = root.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+});
 
-  // /Create issue using Javascript DOM module
-  if (description.length == 0 || assignedTo.length == 0) {
-    //alert about open fields
-    alert("Please fill all fields with required data.");
+// Issue Tracker Logic
 
-    //Buttom Add issue
-    document.getElementById("add-issue").setAttribute("data-toggle", "modal");
-    document
-      .getElementById("add-issue")
-      .setAttribute("data-target", "#emptyField");
-
-    //Add issue
-    document
-      .getElementById("backlog-issue")
-      .setAttribute("data-toggle", "modal");
-    document
-      .getElementById("backlog-issue")
-      .setAttribute("data-target", "#emptyField");
-
-    //Add issue
-    document.getElementById("add-issue").setAttribute("data-toggle", "modal");
-    document
-      .getElementById("progress-issue")
-      .setAttribute("data-target", "#emptyField");
-  } else {
-    //Else remove attributes
-    document
-      .getElementById("add-issue")
-      .removeAttribute("data-toggle", "modal");
-
-    document
-      .getElementById("add-issue")
-      .removeAttribute("data-target", "#emptyField");
-
-    const issue = { id, description, severity, assignedTo, status };
-    let issues = [];
-
-    if (localStorage.getItem("issues")) {
-      issues = JSON.parse(localStorage.getItem("issues"));
+// Initialize issues from localstorage or empty array
+function getIssues() {
+    const issues = localStorage.getItem('issues');
+    if (!issues) return [];
+    try {
+        return JSON.parse(issues);
+    } catch (e) {
+        console.error("Error parsing issues:", e);
+        return [];
     }
-
-    issues.push(issue);
-    localStorage.setItem("issues", JSON.stringify(issues));
-
-    fetchIssues();
-  }
 }
 
-function progressIssue(e) {
-  const getInputValue = (id) => document.getElementById(id).value;
-
-  const description = getInputValue("issueDescription");
-  const severity = getInputValue("issueSeverity");
-  const assignedTo = getInputValue("issueAssignedTo");
-  const id = Math.floor(Math.random() * 100000000) + "";
-
-  const status = "In-Progress";
-
-  // /Create issue using Javascript DOM module
-  if (description.length == 0 || assignedTo.length == 0) {
-    //alert about open fields
-    alert("Please fill all fields with required data.");
-
-    //Buttom Add issue
-    document.getElementById("add-issue").setAttribute("data-toggle", "modal");
-    document
-      .getElementById("add-issue")
-      .setAttribute("data-target", "#emptyField");
-
-    //Add issue
-    document
-      .getElementById("backlog-issue")
-      .setAttribute("data-toggle", "modal");
-    document
-      .getElementById("backlog-issue")
-      .setAttribute("data-target", "#emptyField");
-
-    //Add issue
-    document.getElementById("add-issue").setAttribute("data-toggle", "modal");
-    document
-      .getElementById("progress-issue")
-      .setAttribute("data-target", "#emptyField");
-  } else {
-    //Else remove attributes
-    document
-      .getElementById("add-issue")
-      .removeAttribute("data-toggle", "modal");
-
-    document
-      .getElementById("add-issue")
-      .removeAttribute("data-target", "#emptyField");
-
-    const issue = { id, description, severity, assignedTo, status };
-    let issues = [];
-
-    if (localStorage.getItem("issues")) {
-      issues = JSON.parse(localStorage.getItem("issues"));
-    }
-
-    issues.push(issue);
-    localStorage.setItem("issues", JSON.stringify(issues));
-
-    fetchIssues();
-  }
+function saveIssues(issues) {
+    localStorage.setItem('issues', JSON.stringify(issues));
+    renderIssues();
 }
 
-function backlogIssue(e) {
-  const getInputValue = (id) => document.getElementById(id).value;
+// Global form handler
+document.getElementById('issueInputForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitIssue('Open');
+});
 
-  const description = getInputValue("issueDescription");
-  const severity = getInputValue("issueSeverity");
-  const assignedTo = getInputValue("issueAssignedTo");
-  const id = Math.floor(Math.random() * 100000000) + "";
-
-  const status = "Back-log";
-
-  // /Create issue using Javascript DOM module
-  if (description.length == 0 || assignedTo.length == 0) {
-    //alert about open fields
-    alert("Please fill all fields with required data.");
-
-    //Buttom Add issue
-    document.getElementById("add-issue").setAttribute("data-toggle", "modal");
-    document
-      .getElementById("add-issue")
-      .setAttribute("data-target", "#emptyField");
-
-    //Add issue
-    document
-      .getElementById("backlog-issue")
-      .setAttribute("data-toggle", "modal");
-    document
-      .getElementById("backlog-issue")
-      .setAttribute("data-target", "#emptyField");
-
-    //Add issue
-    document.getElementById("add-issue").setAttribute("data-toggle", "modal");
-    document
-      .getElementById("progress-issue")
-      .setAttribute("data-target", "#emptyField");
-  } else {
-    //Else remove attributes
-    document
-      .getElementById("add-issue")
-      .removeAttribute("data-toggle", "modal");
-
-    document
-      .getElementById("add-issue")
-      .removeAttribute("data-target", "#emptyField");
-
-    const issue = { id, description, severity, assignedTo, status };
-    let issues = [];
-
-    if (localStorage.getItem("issues")) {
-      issues = JSON.parse(localStorage.getItem("issues"));
-    }
-
-    issues.push(issue);
-    localStorage.setItem("issues", JSON.stringify(issues));
-
-    fetchIssues();
-  }
+function getInputValue(id) {
+    return document.getElementById(id).value;
 }
 
-// end function of fetching issue
-const closeIssue = (id) => {
-  const issues = JSON.parse(localStorage.getItem("issues"));
-  const currentIssue = issues.find((issue) => issue.id == id);
-  currentIssue.status = "Closed";
-  currentIssue.description = `<strike>${currentIssue.description}</strike>`;
-  localStorage.setItem("issues", JSON.stringify(issues));
-  fetchIssues();
-};
+function validateInput(description, assignedTo) {
+    if (!description || description.trim().length === 0) {
+        showToast("Please enter a description.");
+        return false;
+    }
+    if (!assignedTo || assignedTo.trim().length === 0) {
+        showToast("Please assign this issue to someone.");
+        return false;
+    }
+    return true;
+}
 
-const backLogIssue = (id) => {
-  const issues = JSON.parse(localStorage.getItem("issues"));
-  const remainingIssues = issues.filter((issue) => issue.id != id);
-  currentIssue.status = `in-backlog`;
-  localStorage.setItem("issues", JSON.stringify(remainingIssues));
-  fetchIssues();
-};
+function submitIssue(status = 'Open') {
+    const description = getInputValue('issueDescription');
+    const severity = getInputValue('issueSeverity');
+    const assignedTo = getInputValue('issueAssignedTo');
+    const id = Date.now().toString(); // Use timestamp as ID for uniqueness
 
-//Delete Issue
-const deleteIssue = (id) => {
-  const issues = JSON.parse(localStorage.getItem("issues"));
-  const remainingIssues = issues.filter((issue) => issue.id != id);
-  localStorage.removeItem("issues");
-  localStorage.setItem("issues", JSON.stringify(remainingIssues));
-  fetchIssues();
-};
+    if (!validateInput(description, assignedTo)) return;
 
-// List of issues
-const fetchIssues = () => {
-  const issues = JSON.parse(localStorage.getItem("issues"));
-  const issuesList = document.getElementById("issuesList");
-  issuesList.innerHTML = "";
-  const d = new Date();
+    const newIssue = {
+        id,
+        description,
+        severity,
+        assignedTo,
+        status,
+        createdAt: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
+    };
 
-  for (var i = 0; i < issues.length; i++) {
-    const { id, description, severity, assignedTo, status } = issues[i];
+    const issues = getIssues();
+    issues.push(newIssue);
+    saveIssues(issues);
 
-    issuesList.innerHTML += `<div class="well">
-      <h6>Issue ID: ${id} </h6>
-      <p><span class="label label-info"> ${status} </span></p>
-      <h3> ${description} </h3>
-      <p><span class="glyphicon "></span> Priority :  ${severity}</p>
-      <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
-      <p><span class="glyphicon glyphicon-time"></span> ${d}</p>
+    document.getElementById('issueInputForm').reset();
+    showToast(`Issue added successfully as ${status}!`);
+}
 
-      <button onclick="closeIssue(${id})" class="btn btn-warning">Close</button>
-      <button onclick="deleteIssue(${id})" class="btn btn-danger">Delete</button>
-      </div>`;
-  }
-};
+// Wrapper for buttons outside the main submit flow
+function addQuickIssue(status) {
+    submitIssue(status);
+}
 
-fetchIssues();
+function closeIssue(id) {
+    const issues = getIssues();
+    const issueIndex = issues.findIndex(issue => issue.id == id);
+    if (issueIndex > -1) {
+        issues[issueIndex].status = 'Closed';
+        saveIssues(issues);
+        showToast("Issue marker as closed.");
+    }
+}
+
+function deleteIssue(id) {
+    const issues = getIssues();
+    const remainingIssues = issues.filter(issue => issue.id != id);
+    saveIssues(remainingIssues);
+    showToast("Issue deleted.");
+}
+
+function renderIssues() {
+    const issues = getIssues();
+    const issuesList = document.getElementById('issuesList');
+    const totalCount = document.getElementById('total-count');
+    
+    issuesList.innerHTML = '';
+    totalCount.textContent = `${issues.length} Issues`;
+
+    // Sort by newest first
+    issues.reverse().forEach(issue => {
+        const { id, description, severity, assignedTo, status, createdAt } = issue;
+        
+        // Determine status class
+        const displayStatus = status || 'Open';
+        
+        // Render content
+        const issueCard = document.createElement('div');
+        issueCard.className = 'issue-card';
+        
+        // Add strike-through effect for closed issues style logic if needed, 
+        // but aesthetic requirements favor opacity/badges over <strike> tags usually.
+        // We will keep text clean but use the status badge effectively.
+        
+        issueCard.innerHTML = `
+            <div class="issue-header">
+                <span class="issue-id">#${id.slice(-6)}</span>
+                <span class="issue-status-badge status-${displayStatus}">${displayStatus}</span>
+            </div>
+            
+            <div class="issue-desc">
+                ${displayStatus === 'Closed' ? `<s style="opacity: 0.6">${description}</s>` : description}
+            </div>
+            
+            <div class="issue-meta">
+                <div class="meta-item">
+                    <span class="severity-dot sev-${severity}"></span>
+                    <span>${severity}</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>${assignedTo}</span>
+                </div>
+                <div class="meta-item" title="${createdAt || 'Just now'}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>${createdAt ? createdAt.split(' ')[0] : 'Today'}</span>
+                </div>
+            </div>
+
+            <div class="issue-actions">
+                ${displayStatus !== 'Closed' ? `<button onclick="closeIssue('${id}')" class="btn btn-issue-action-close">Close</button>` : ''}
+                <button onclick="deleteIssue('${id}')" class="btn btn-issue-action-delete">Delete</button>
+            </div>
+        `;
+        
+        issuesList.appendChild(issueCard);
+    });
+}
+
+// Toast System
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    const msg = document.getElementById('toast-message');
+    msg.textContent = message;
+    
+    toast.classList.remove('hidden');
+    
+    setTimeout(() => {
+        toast.classList.add('hidden');
+    }, 3000);
+}
+
+// Initial Render
+document.addEventListener('DOMContentLoaded', renderIssues);

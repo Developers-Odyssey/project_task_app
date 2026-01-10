@@ -1,145 +1,122 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bug Tracker</title>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+<html lang="en">
 
-  <body>
-    <header>
-      <img src="images/logo.png" alt="" />
-      <nav>
-        <ol>
-          <li><a href="404.html">Admin</a></li>
-          <li><a href="login.html">Sign Out</a></li>
-          <li><a href="https://github.com/WPR-BC-Project/">Github Repo</a></li>
-          <li><a href="https://github.com/WPR-BC-Project/projectX/pulse">Github Team</a></li>
-          <li><a href="https://github.com/WPR-BC-Project/projectX">Report a Bug</a></li>
-        </ol>
-      </nav>
-    </header>
-    <div class="container">
-      <h1>Issue Tracker</h1>
-      <div class="jumbotron">
-        <h3>Add New Issue:</h3>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BugPro - Bug Tracker</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="app-background"></div>
+
+  <header class="glass-header">
+    <div class="brand">
+      <div class="logo-container">
+        <img src="images/logo.png" alt="BugPro Logo" class="logo-img" />
+      </div>
+      <span class="brand-name">BugPro</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="404.html" class="nav-item">Admin</a>
+      <a href="https://github.com/WPR-BC-Project/" class="nav-item">Github Repo</a>
+      <a href="https://github.com/WPR-BC-Project/projectX" class="nav-item">Report Bug</a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <a href="login.html" class="btn btn-secondary">Sign Out</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="add-issue-section">
+      <div class="glass-card form-card">
+        <h2 class="section-title">Log New Issue</h2>
+
         <form id="issueInputForm">
-          <div class="form-group">
-            <label for="issueDescription">Description</label>
-            <input
-              type="text"
-              class="form-control"
-              id="issueDescription"
-              placeholder="Describe the issue ..."
-            />
-          </div>
-          <div class="form-group">
-            <label for="issueSeverity">Severity</label>
-            <select id="issueSeverity" class="form-control">
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <!-- Assigned to user : Add user -->
-            <label for="issueAssignedTo">Assigned To</label>
-            <input
-              type="text"
-              class="form-control"
-              id="issueAssignedTo"
-              placeholder="Enter responsible ..."
-            />
-          </div>
-          <!-- Add Issue -->
-          <button
-            id="add-issue"
-            onclick="submitIssue()"
-            class="btn btn-primary"
-          >
-            Add Issue
-          </button>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="issueDescription">Description</label>
+              <input type="text" id="issueDescription" placeholder="Describe the issue succinctly..."
+                autocomplete="off" />
+            </div>
 
-          <!-- Open Isssue -->
-          <button
-            id="progress-issue"
-            onclick="progressIssue()"
-            class="btn btn-primary"
-          >
-            In Progress
-          </button>
+            <div class="form-group">
+              <label for="issueSeverity">Severity</label>
+              <div class="select-wrapper">
+                <select id="issueSeverity">
+                  <option value="Low">Low Priority</option>
+                  <option value="Medium">Medium Priority</option>
+                  <option value="High">High Priority</option>
+                </select>
+              </div>
+            </div>
 
-          <!-- Overdue nIssue -->
-          <button
-            id="backlog-issue"
-            onclick="backlogIssue()"
-            class="btn btn-primary"
-          >
-            Backlog
-            <!-- Add to Backlog -->
-          </button>
+            <div class="form-group">
+              <label for="issueAssignedTo">Assigned To</label>
+              <input type="text" id="issueAssignedTo" placeholder="Assignee name..." autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" data-status="Open">
+              Add Issue
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="addQuickIssue('In-Progress')">
+              Start Progress
+            </button>
+            <button type="button" class="btn btn-ghost" onclick="addQuickIssue('Backlog')">
+              To Backlog
+            </button>
+          </div>
         </form>
       </div>
+    </section>
 
-      <hr />
-      <!-- Print Issue Bug Tracker  -->
-      <div class="col-lg-12">
-        <div id="issuesList"></div>
+    <section class="issues-display-section">
+      <div class="section-header">
+        <h3>Active Issues</h3>
+        <div class="stats-pill" id="total-count">0 Issues</div>
       </div>
-    </div>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="emptyField"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="emptyFieldLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="emptyFieldLabel">Invalid Input!</h5>
-            <!-- If you press close it will close the issue  -->
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <!-- Error message for the modal -->
-          <div class="modal-body">
-            Please provide the desciption of the issue and also the person name
-            who you want to assign the issue.
-          </div>
-
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+      <div id="issuesList" class="issues-grid">
+        <!-- Issues will be injected here -->
       </div>
-    </div>
-    <br />
+    </section>
+  </main>
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="main.js"></script>
-  </body>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">
+    <div class="toast-content">
+      <span id="toast-message">Notification</span>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+
 </html>
