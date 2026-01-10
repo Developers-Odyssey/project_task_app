@@ -1,31 +1,65 @@
 <!DOCTYPE html>
-  <head>
-    <title>Login</title>
-    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css">
-  </head>
+<html lang="en">
 
-  <body>
-    <header>
-      <img src="images/logo.png" alt="">
-      <nav>
-          <ol>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="https://github.com/WPR-BC-Project/">Github Repo</a></li>
-            <li><a href="https://github.com/WPR-BC-Project/projectX/pulse">Github Team</a></li>
-            <li><a href="https://github.com/WPR-BC-Project/projectX">Report a Bug</a></li>
-          </ol>
-      </nav>
-    </header>
-    <div id="404">This Link is currently in progress</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BugPro - 404</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
 
-     </div>
+    .error-container {
+      max-width: 500px;
+      padding: 2rem;
+    }
 
-    <script>
+    .error-code {
+      font-size: 6rem;
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--color-primary), #64b5f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
 
-    </script>
+    .error-message {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
 
-  </body>
+<body>
+  <div class="app-background"></div>
+
+  <div class="glass-card error-container">
+    <div class="error-code">404</div>
+    <div class="error-message">This page is currently under development or does not exist.</div>
+
+    <div class="button-group" style="justify-content: center; border-top: none; padding-top: 0;">
+      <a href="index.html" class="btn btn-primary">Go to Dashboard</a>
+      <a href="login.html" class="btn btn-secondary">Login</a>
+    </div>
+  </div>
+
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</body>
+
 </html>
